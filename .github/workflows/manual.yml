@@ -1,0 +1,57 @@
+name: Manual Test Workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      node-version:
+        description: 'Node.js version to use'
+        required: true
+        default: '20.x'
+        type: choice
+        options:
+          - '18.x'
+          - '20.x'
+
+permissions:
+  contents: read
+
+jobs:
+  manual-test:
+    name: Manual Test on Node.js ${{ github.event.inputs.node-version }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Setup Node.js ${{ github.event.inputs.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ github.event.inputs.node-version }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Prettier check
+        run: npm run prettier:check
+
+      - name: Run Solhint
+        run: npm run lint:sol
+
+      - name: Compile contracts
+        run: npm run compile
+
+      - name: Run tests
+        run: npm test
+
+      - name: Generate coverage report
+        run: npm run test:coverage
+
+      - name: Display test summary
+        run: |
+          echo "✅ Tests completed successfully"
+          echo "Node.js version: ${{ github.event.inputs.node-version }}"
+          echo "Timestamp: $(date)"
