@@ -1,0 +1,10 @@
+export default {
+  istanbulReporter: ["html", "lcov", "text", "json"],
+  providerOptions: {
+    mnemonic: process.env.MNEMONIC || "test test test test test test test test test test test junk",
+  },
+  skipFiles: ["test/"],
+  mocha: {
+    timeout: 40000,
+  },
+};
