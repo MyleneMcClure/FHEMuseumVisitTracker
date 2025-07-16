@@ -1,0 +1,11 @@
+# directories
+node_modules/
+artifacts/
+cache/
+coverage/
+dist/
+types/
+
+# files
+*.env
+*.log
