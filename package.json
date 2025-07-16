@@ -1,0 +1,61 @@
+{
+  "name": "museum-visit-tracker",
+  "version": "1.0.0",
+  "description": "Privacy-preserving museum visit tracking system with FHE encryption",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "clean": "hardhat clean && rimraf ./coverage ./coverage.json ./dist ./gas-report.txt",
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "test:coverage": "hardhat coverage",
+    "test:gas": "REPORT_GAS=true hardhat test",
+    "deploy": "hardhat run scripts/deploy.js --network sepolia",
+    "deploy:local": "hardhat run scripts/deploy.js --network localhost",
+    "verify": "hardhat run scripts/verify.js --network sepolia",
+    "interact": "hardhat run scripts/interact.js --network sepolia",
+    "simulate": "hardhat run scripts/simulate.js --network localhost",
+    "node": "hardhat node",
+    "lint": "npm run lint:sol && npm run lint:js && npm run prettier:check",
+    "lint:sol": "solhint 'contracts/**/*.sol'",
+    "lint:js": "eslint '**/*.{js,cjs}' --ignore-path .eslintignore",
+    "lint:fix": "npm run lint:sol -- --fix && npm run lint:js -- --fix",
+    "prettier:check": "prettier --check \"**/*.{js,cjs,json,md,sol,yml}\"",
+    "prettier:write": "prettier --write \"**/*.{js,cjs,json,md,sol,yml}\"",
+    "format": "npm run prettier:write",
+    "security": "npm audit --audit-level=moderate",
+    "security:fix": "npm audit fix",
+    "size": "hardhat size-contracts",
+    "prepare": "husky install",
+    "pre-commit": "npm run lint && npm test",
+    "pre-push": "npm run test:coverage && npm run security"
+  },
+  "keywords": [
+    "fhe",
+    "privacy",
+    "museum",
+    "blockchain",
+    "ethereum",
+    "zama"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "@nomicfoundation/hardhat-verify": "^2.0.0",
+    "eslint": "^8.50.0",
+    "hardhat": "^2.19.0",
+    "hardhat-contract-sizer": "^2.10.0",
+    "hardhat-gas-reporter": "^2.0.0",
+    "husky": "^8.0.3",
+    "prettier": "^3.0.0",
+    "prettier-plugin-solidity": "^1.3.0",
+    "rimraf": "^5.0.0",
+    "solhint": "^4.0.0",
+    "solidity-coverage": "^0.8.5"
+  },
+  "dependencies": {
+    "@fhevm/solidity": "^0.5.0",
+    "dotenv": "^16.3.1"
+  }
+}
