@@ -1,0 +1,29 @@
+{
+  "name": "museum-tracker-example",
+  "version": "1.0.0",
+  "description": "Privacy-Preserving Museum Visit Tracker - FHEVM SDK Example",
+  "type": "module",
+  "scripts": {
+    "compile": "hardhat compile",
+    "deploy": "hardhat run scripts/deploy.js --network sepolia",
+    "deploy:local": "hardhat run scripts/deploy.js --network localhost",
+    "interact": "hardhat run scripts/interact.js --network sepolia",
+    "node": "hardhat node"
+  },
+  "keywords": [
+    "fhevm",
+    "privacy",
+    "museum",
+    "example"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "hardhat": "^2.19.0"
+  },
+  "dependencies": {
+    "@fhevm/solidity": "^0.5.0",
+    "dotenv": "^16.3.1",
+    "fhevm-sdk": "file:../../packages/fhevm-sdk"
+  }
+}
