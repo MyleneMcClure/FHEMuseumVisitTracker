@@ -1,12 +1,15 @@
-# FHE Museum Visit Tracker
+# FHE Museum Visit Tracker - Full-Stack Privacy-Preserving Application
 
 [![CI/CD Pipeline](https://github.com/MyleneMcClure/FHEMuseumVisitTracker/workflows/CI%2FCD%20Pipeline/badge.svg)](https://github.com/MyleneMcClure/FHEMuseumVisitTracker/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Solidity](https://img.shields.io/badge/Solidity-0.8.24-blue.svg)](https://soliditylang.org/)
 [![Hardhat](https://img.shields.io/badge/Built%20with-Hardhat-yellow.svg)](https://hardhat.org/)
+[![React](https://img.shields.io/badge/React-18.2.0-61DAFB.svg)](https://reactjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0.0-3178C6.svg)](https://www.typescriptlang.org/)
+[![Vite](https://img.shields.io/badge/Vite-4.4.0-646CFF.svg)](https://vitejs.dev/)
 [![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen.svg)](https://fhe-museum-visit-tracker.vercel.app/)
 
-**Confidential Cultural Consumption Data System** powered by Fully Homomorphic Encryption (FHE) technology, enabling privacy-preserving visitor analytics for museums and cultural institutions.
+**Confidential Cultural Consumption Data System** - A complete full-stack Web3 application powered by Fully Homomorphic Encryption (FHE) technology, enabling privacy-preserving visitor analytics for museums and cultural institutions.
 
 ## 🔗 Quick Links
 
@@ -191,6 +194,66 @@ The system supports comprehensive cultural institution coverage:
 - 🌿 **Nature** - Natural history and environmental exhibits
 
 
+## 📦 Project Structure
+
+This is a **full-stack Web3 application** with both smart contract and frontend components:
+
+```
+museum-tracker/
+├── contracts/                          # Smart Contract Layer
+│   └── PrivateMuseumVisitTracker.sol  # FHE-enabled Solidity contract (400+ lines)
+│
+├── frontend/                           # Frontend Application Layer
+│   ├── src/
+│   │   ├── components/                # React Components (5 components)
+│   │   │   ├── WalletConnect.tsx      # MetaMask wallet integration
+│   │   │   ├── VisitorRegistration.tsx # Encrypted visitor registration
+│   │   │   ├── VisitRecorder.tsx      # Private visit recording
+│   │   │   ├── ExhibitionList.tsx     # Exhibition browser
+│   │   │   └── ExhibitionManager.tsx  # Exhibition management
+│   │   ├── lib/
+│   │   │   └── contract.ts            # Contract ABI and configuration
+│   │   ├── App.tsx                    # Main application component
+│   │   ├── main.tsx                   # React entry point
+│   │   └── index.html                 # HTML entry point
+│   ├── vite.config.ts                 # Vite build configuration
+│   ├── tsconfig.json                  # TypeScript configuration
+│   └── package.json                   # Frontend dependencies
+│
+├── scripts/                            # Deployment & Interaction Scripts
+│   ├── deploy.js                      # Smart contract deployment
+│   └── interact.js                    # Contract interaction examples
+│
+├── config/
+│   └── hardhat.config.js              # Hardhat development configuration
+│
+├── package.json                        # Root project dependencies
+└── README.md                          # Project documentation
+
+Total Files: 27
+Total Lines of Code: 4,665
+```
+
+### Application Architecture
+
+**Three-Layer Architecture:**
+
+1. **Smart Contract Layer** (Blockchain)
+   - Solidity contract with FHE encryption
+   - Deployed on Sepolia testnet
+   - Handles visitor registration, visit recording, exhibition management
+
+2. **Frontend Layer** (React + TypeScript + Vite)
+   - Modern React 18 with hooks
+   - TypeScript for type safety
+   - Vite for fast development and optimized builds
+   - MetaMask integration for Web3 wallet
+
+3. **Integration Layer** (fhevm-sdk + Ethers.js)
+   - Custom SDK for FHE operations
+   - Ethers.js for blockchain interaction
+   - Encrypted data handling before blockchain submission
+
 ## 🚀 Getting Started
 
 ### Prerequisites
@@ -240,7 +303,29 @@ GATEWAY_URL=https://gateway.zama.ai
 
 ### Running the Application
 
-#### Smart Contract Development
+#### Option 1: Frontend Development (React + Vite)
+
+```bash
+# Navigate to frontend directory
+cd frontend
+
+# Install frontend dependencies
+npm install
+
+# Start development server (http://localhost:5173)
+npm run dev
+
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
+
+# Lint TypeScript code
+npm run lint
+```
+
+#### Option 2: Smart Contract Development
 
 ```bash
 # Compile contracts
@@ -259,6 +344,19 @@ npm run verify
 npm run interact
 ```
 
+#### Option 3: Full-Stack Development
+
+```bash
+# Terminal 1: Start Hardhat local node
+npm run node
+
+# Terminal 2: Deploy contract to local network
+npm run deploy:local
+
+# Terminal 3: Start frontend dev server
+cd frontend && npm run dev
+```
+
 ### Quick Test Drive
 
 Want to try it immediately? Visit the live application:
@@ -271,31 +369,170 @@ Want to try it immediately? Visit the live application:
 4. Record a private visit with encrypted feedback
 5. See your transaction confirmed on blockchain
 
+## 🎨 Frontend Features
+
+### React Components Overview
+
+The frontend application consists of **5 main React components**, each responsible for a specific feature:
+
+#### 1. **WalletConnect Component** (`WalletConnect.tsx`)
+- MetaMask wallet connection and disconnection
+- Automatic network detection and switching to Sepolia
+- Wallet address display with truncation
+- Connection status indicator
+- Responsive design with gradient styling
+
+**Key Features:**
+- Detects if MetaMask is installed
+- Handles account changes automatically
+- Switches to Sepolia testnet if needed
+- Shows user-friendly connection status
+
+#### 2. **VisitorRegistration Component** (`VisitorRegistration.tsx`)
+- One-time visitor registration with encrypted age
+- Age validation (1-120 years)
+- Integration with smart contract `registerVisitor()` function
+- Transaction confirmation and status display
+- Clean, intuitive form interface
+
+**Privacy Features:**
+- Age is encrypted client-side before blockchain submission
+- No plaintext age data ever stored on-chain
+- User confirmation of successful registration
+
+#### 3. **VisitRecorder Component** (`VisitRecorder.tsx`)
+- Record private visit experiences
+- Encrypted feedback submission
+- Multiple data points collection:
+  - Exhibition ID selection
+  - Satisfaction rating (1-10 scale) - encrypted
+  - Visit duration in minutes
+  - Interest level (1-5 scale) - encrypted
+- Input validation and error handling
+- Real-time transaction status
+
+**Encryption Flow:**
+```
+User Input → Client-Side Encryption → Blockchain → Permanent Privacy
+```
+
+#### 4. **ExhibitionList Component** (`ExhibitionList.tsx`)
+- Display all available exhibitions
+- Real-time data from smart contract
+- Exhibition information display:
+  - Exhibition name and type
+  - Start and end dates
+  - Active/inactive status
+  - Public visitor count (aggregate only)
+- Responsive grid layout
+- Color-coded exhibition types
+
+**Exhibition Types:**
+- 🏛️ History - Orange theme
+- 🎨 Art - Pink theme
+- 🔬 Science - Blue theme
+- 🌍 Culture - Green theme
+- 💻 Technology - Purple theme
+- 🌿 Nature - Teal theme
+
+#### 5. **ExhibitionManager Component** (`ExhibitionManager.tsx`)
+- Museum manager functionality
+- Create new exhibitions
+- Set exhibition dates and types
+- Access control (only authorized managers)
+- Exhibition activation/deactivation
+
+**Form Fields:**
+- Exhibition name (required)
+- Exhibition type dropdown (6 options)
+- Start date (Unix timestamp)
+- End date (Unix timestamp)
+- Input validation
+
+### UI/UX Features
+
+**Design Philosophy:**
+- **Modern Gradient Design**: Blue-to-purple gradient theme
+- **Responsive Layout**: Works on desktop, tablet, and mobile
+- **Card-Based Interface**: Clean, organized component layout
+- **Real-time Feedback**: Loading states and transaction confirmations
+- **Error Handling**: User-friendly error messages
+- **Accessibility**: Semantic HTML and proper ARIA labels
+
+**Styling Approach:**
+- CSS Modules for scoped styling
+- Custom CSS with modern features (flexbox, grid)
+- Gradient backgrounds and transitions
+- Hover effects for better interactivity
+- Consistent color scheme across components
+
+### State Management
+
+- **React Hooks**: `useState`, `useEffect` for local state
+- **Ethers.js Integration**: Contract instance management
+- **Wallet State**: Connected account and network tracking
+- **Transaction State**: Loading, success, error states
+- **Form State**: Input validation and submission handling
+
+### Performance Optimizations
+
+- **Vite Build Tool**: Lightning-fast HMR (Hot Module Replacement)
+- **Code Splitting**: Automatic chunk splitting by Vite
+- **Tree Shaking**: Remove unused code in production
+- **TypeScript**: Compile-time error detection
+- **Lazy Loading**: Components loaded on demand
+
 ## 🛠️ Technology Stack
 
-### Blockchain Layer
+### Frontend Layer
 
-- **Solidity 0.8.24** - Smart contract language
-- **Zama fhEVM** - Fully Homomorphic Encryption
-- **Hardhat** - Development environment
-- **Ethers.js v6** - Blockchain interaction
+- **React 18.2.0** - Modern UI framework with hooks
+- **TypeScript 5.0.0** - Type-safe JavaScript for robust development
+- **Vite 4.4.0** - Next-generation frontend build tool
+- **Ethers.js v6.0.0** - Ethereum blockchain interaction library
+- **fhevm-sdk** - Custom SDK for FHE operations and encryption
 
-### Development Tools
+### Blockchain & Smart Contracts Layer
 
-- **Hardhat** - Compilation, testing, deployment
-- **Solhint** - Solidity linting
-- **ESLint** - JavaScript linting
+- **Solidity 0.8.24** - Smart contract programming language
+- **Zama fhEVM** - Fully Homomorphic Encryption for Ethereum
+- **@fhevm/solidity ^0.5.0** - FHE library for Solidity contracts
+- **Hardhat 2.19.0** - Ethereum development environment
+- **Ethers.js v6** - Blockchain interaction and contract deployment
+
+### Development Tools & Build System
+
+- **Vite** - Lightning-fast frontend dev server and bundler
+- **@vitejs/plugin-react** - React plugin for Vite with Fast Refresh
+- **Hardhat** - Smart contract compilation, testing, deployment
+- **Solhint** - Solidity code linting
+- **ESLint 8.50.0** - JavaScript/TypeScript linting
 - **Prettier** - Code formatting
-- **Husky** - Git hooks
-- **GitHub Actions** - CI/CD pipeline
+- **dotenv** - Environment variable management
+- **Husky** - Git hooks for code quality
+- **GitHub Actions** - Automated CI/CD pipeline
 
 ### Testing Framework
 
-- **Mocha** - Test framework
-- **Chai** - Assertion library
-- **Hardhat Network** - Local blockchain
-- **Hardhat Coverage** - Code coverage
-- **Gas Reporter** - Gas usage analysis
+- **Mocha** - JavaScript test framework
+- **Chai** - Assertion library for tests
+- **Hardhat Network** - Local blockchain for testing
+- **Hardhat Coverage** - Smart contract code coverage
+- **Gas Reporter** - Transaction gas usage analysis
+
+### Type System & Definitions
+
+- **TypeScript** - Static type checking across entire stack
+- **@types/react** - React type definitions
+- **@types/react-dom** - React DOM type definitions
+- **@types/node** - Node.js type definitions
+
+### Deployment & Infrastructure
+
+- **Vercel** - Frontend deployment and hosting
+- **Sepolia Testnet** - Ethereum test network with FHE support
+- **Infura** - Ethereum node provider
+- **MetaMask** - Web3 wallet integration
 
 ## 📚 Documentation
 
